@@ -1,0 +1,26 @@
+# Use Node.js as the base image
+FROM node:18
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the entire source code
+COPY . .
+
+# Build the TypeScript project
+RUN npm run build
+
+# Ensure the required directories exist
+RUN mkdir -p /app/output && mkdir -p /app/dist
+
+# Set correct file paths for the application
+WORKDIR /app/dist/src
+
+# Start the application
+CMD ["node", "main.js"]
