@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import * as fss from 'fs';
+import * as fsSync from 'fs';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
@@ -30,7 +30,7 @@ export class FileService {
     console.log(`Generating file at: ${this.filePath}`);
 
     return new Promise((resolve, reject) => {
-      const stream = fss.createWriteStream(this.filePath);
+      const stream = fsSync.createWriteStream(this.filePath);
       let size = 0;
       const MAX_SIZE = 10 * 1024 * 1024;
 
@@ -87,7 +87,7 @@ export class FileService {
     console.log(`Processing file: ${this.filePath}`);
 
     try {
-      if (!fss.existsSync(this.filePath)) {
+      if (!fsSync.existsSync(this.filePath)) {
         throw new HttpException('File does not exist', HttpStatus.NOT_FOUND);
       }
 
@@ -143,7 +143,7 @@ export class FileService {
       );
 
       const outputDir = path.dirname(this.outputPath);
-      if (!fss.existsSync(outputDir)) {
+      if (!fsSync.existsSync(outputDir)) {
         await fs.mkdir(outputDir, { recursive: true });
       }
 
